@@ -194,7 +194,14 @@ class ListType(MultiType):
             try:
                 self.field.validate(item)
             except ValidationError as exc:
-                errors.append(exc.messages)
+                # 2015.05.19: [lb] raising strings, but coming through as dicts.
+                # The schematics branch just adds the key (the json key in
+                # question), but we want the value (the string we raised).
+                try:
+                    errors += [x for x in exc.messages.values()]
+                except AttributeError:
+                    errors += exc.messages
+
         if errors:
             raise ValidationError(errors)
 
