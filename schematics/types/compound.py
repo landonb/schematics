@@ -197,8 +197,9 @@ class ListType(MultiType):
                 # 2015.05.19: [lb] raising strings, but coming through as dicts.
                 # The schematics branch just adds the key (the json key in
                 # question), but we want the value (the string we raised).
+                # 2015.08.24: Hrmm, looks like we want the keys, too.
                 try:
-                    errors += [x for x in exc.messages.values()]
+                    errors += ['"%s": %s' % (k, v) for k,v in exc.messages.items()]
                 except AttributeError:
                     errors += exc.messages
 
