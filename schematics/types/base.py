@@ -170,7 +170,7 @@ class BaseType(TypeMeta('BaseTypeBase', (object, ), {})):
 
     MESSAGES = {
         'required': u"This field is required.",
-        'choices': u"Value must be one of {0}.",
+        'choices': u"Value must be one of {0}; not {1}.",
     }
 
     def __init__(self, required=False, default=None, serialized_name=None,
@@ -254,7 +254,7 @@ class BaseType(TypeMeta('BaseTypeBase', (object, ), {})):
         if self.choices is not None:
             if value not in self.choices:
                 raise ValidationError(self.messages['choices']
-                                      .format(unicode(self.choices)))
+                                      .format(unicode(self.choices), value))
 
     def mock(self, context=None):
         if not self.required and not random.choice([True, False]):
